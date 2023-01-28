@@ -11,6 +11,8 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 from torch.autograd import Variable, Function
+import sklearn.metrics as skm
+from scipy.stats import wasserstein_distance
 
 from common.discretization import *
 from common.loss import *
@@ -49,7 +51,7 @@ class NetworkApproxLSTM(nn.Module):
         # batch_first – If True, then the input and output tensors are provided
         # as (batch, seq, feature) or (batch, num_layers, hidden_size).
         self.lstm = nn.LSTM(self.input_size, self.hidden_size, self.num_layers,
-                            batch_first = True) 
+                            batch_first = True)
 
         self.linearL = nn.Linear(self.hidden_size, 1)
         self.linearD = nn.Linear(self.hidden_size, 1)
@@ -81,7 +83,7 @@ def discretize_features(X, y_l, granu = 1000):
     Latency = np.array(Latency).astype(int)
 
     data = np.concatenate((X.T[:-2].T, Last, EWMA), axis = 1)
-    
+
     return data, Latency, meta_last, meta_ewma, meta_latency
 
 def format_data(X, y_d, y_l, num_servers = 4, degree = 2,
@@ -165,6 +167,15 @@ def test(model, data, target_drop, target_latency, alpha=0.33, drop_weight=0.5,
 
     pred_drop, pred_latency = model(data)
 
+    """print("MIMICNET VALUES")
+    print(target_latency)
+    print(pred_latency)
+    print(f"MAPE: {skm.mean_absolute_percentage_error(target_latency.detach().numpy(), pred_latency.detach().numpy())}")
+    print(f"MAPE Pytorch: {skm.mean_absolute_percentage_error(target_latency.detach().numpy(), pred_latency.detach().numpy())}")
+    print(f"MSE: {skm.mean_squared_error(target_latency.detach().numpy(), pred_latency.detach().numpy())}")
+    print(f"MAE: {skm.mean_absolute_error(target_latency.detach().numpy(), pred_latency.detach().numpy())}")
+    print(f"R2: {skm.r2_score(target_latency.detach().numpy(), pred_latency.detach().numpy())}")"""
+
     pred_drop = pred_drop.view(-1, 1)
     pred_latency = pred_latency.view(-1, 1)
     target_drop = target_drop.view(-1, 1)
@@ -184,7 +195,7 @@ def test(model, data, target_drop, target_latency, alpha=0.33, drop_weight=0.5,
 
     loss = alpha*lossLatency + (1-alpha)*lossDrop
 
-    return loss.item()
+    return loss.item(), target_latency, pred_latency
 
 
 if __name__ == '__main__':
@@ -289,7 +300,7 @@ if __name__ == '__main__':
     batch_size = args.batch_size
     learning_rate = args.learning_rate
     train_size = args.train_size
-    enable_validation = args.enable_validation
+    enable_validation = True
 
     torch.cuda.manual_seed_all(22)
     torch.manual_seed(22)
@@ -384,6 +395,8 @@ if __name__ == '__main__':
         if enable_validation:
             val_loss_list = []
             val_loss_count = []
+            true_list = np.array([])
+            pred_list = np.array([])
 
         while window_size + index + (batch_size - 1) <= X.shape[0]:
             cur_step = (int)(index/batch_size)
@@ -418,12 +431,29 @@ if __name__ == '__main__':
                          ' max loss: ', max(loss_list),
                          ' avg loss:', sum(loss_list)/ len(loss_list),
                          ' med loss:', statistics.median(loss_list))
+
             if enable_validation:
-                val_loss_value = test(model, X_test, Y_d_test, Y_l_test,
+                val_loss_value, true, predicted = test(model, X_test, Y_d_test, Y_l_test,
                                       alpha, drop_weight, latency_loss,
                                       discretized_max = disc_factor)
                 val_loss_list.append(val_loss_value)
                 val_loss_count.append(len(X_test))
+                true_list = np.append(true_list, true.detach().numpy())
+                pred_list = np.append(pred_list, predicted.detach().numpy())
+
+                if cur_step % 100 == 0 or steps - cur_step <= 1:
+                    print(f"W. Distance With 0: {wasserstein_distance(true_list, pred_list)}")
+                    mask = true_list != 0
+                    true_list = true_list[mask]
+                    pred_list = pred_list[mask]
+                    if len(true_list) > 0:
+                        print(
+                            f"MAPE: {skm.mean_absolute_percentage_error(true_list, pred_list)}")
+                        print(f"MSE: {skm.mean_squared_error(true_list, pred_list)}")
+                        print(f"MAE: {skm.mean_absolute_error(true_list, pred_list)}")
+                        print(f"R2: {skm.r2_score(true_list, pred_list)}")
+                        print(f"W. Distance: {wasserstein_distance(true_list, pred_list)}")
+
             index += batch_size
 
         print("Saving model...")

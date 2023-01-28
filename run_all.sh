@@ -11,7 +11,7 @@ fi
 VARIANT=${1}
 NUM_CLUSTERS=${2}
 
-./run_1_compile.sh
+./run_1_compile.sh CPU
 
 exec 6>&1
 RESULTS_DIR=$(./run_2_generate.sh ${VARIANT} ${@:3} | tee /dev/fd/6 | tail -n 1)
