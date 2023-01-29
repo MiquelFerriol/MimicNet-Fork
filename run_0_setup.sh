@@ -88,6 +88,25 @@ mkdir -p opt
 mkdir -p tmp
 
 
+echo "Installing anaconda..."
+cd src/
+rm -f Anaconda3-*
+rm -rf ${BASE_DIR}/opt/anaconda3
+wget https://repo.anaconda.com/archive/Anaconda3-5.3.1-Linux-x86_64.sh
+chmod ugo+x Anaconda3-5.3.1-Linux-x86_64.sh
+./Anaconda3-5.3.1-Linux-x86_64.sh -b -p ${BASE_DIR}/opt/anaconda3
+conda update -y -n base -c defaults conda
+
+
+echo "Installing pytorch prereqs..."
+sudo apt-get install -y cmake libgflags-dev
+conda install -y numpy # putting everything on one line causes a downgrade of python to 2.7 for some reason...
+conda install -y pyyaml mkl mkl-include setuptools cmake cffi typing h5py
+conda install -y -c mingfeima mkldnn
+conda install -y -c pytorch magma-cuda92
+conda install -y pyyaml==5.4.1 # switch yaml to 5.4.1
+conda update -y libstdcxx-ng
+conda install -y -c pytorch pytorch torchvision torchaudio cpuonly
 git clone https://github.com/google/glog.git || true
 cd glog
 git checkout v0.4.0
@@ -97,30 +116,30 @@ make
 sudo make install
 cd ..
 
-echo "Installing pybind11..."
-git clone --recursive https://github.com/pytorch/pytorch || true
-cd pytorch
-git rm --cached third_party/nervanagpu || true
-git rm --cached third_party/eigen || true
-git submodule update --init --recursive
-cd third_party/pybind11
-python setup.py install
-cp -r include ${BASE_DIR}/opt/
-cd ../..
+#echo "Installing pybind11..."
+#git clone --recursive https://github.com/pytorch/pytorch || true
+#cd pytorch
+#git rm --cached third_party/nervanagpu || true
+#git rm --cached third_party/eigen || true
+#git submodule update --init --recursive
+#cd third_party/pybind11
+#python setup.py install
+#cp -r include ${BASE_DIR}/opt/
+#cd ../..
 
 #git checkout v0.4.1
 
-echo "Installing pytorch/ATEN..."
-TMPDIR=${BASE_DIR}/tmp python setup.py install
-cd aten/
-mkdir -p build
-cd build
-if [ "$1" == "GPU" ]; then
-    cmake .. -DCMAKE_INSTALL_PREFIX=${BASE_DIR}/opt -DUSE_TENSORRT=OFF -DUSE_NVRTC=ON -DCUDA_TOOLKIT_ROOT_DIR=${CUDA_HOME}
-else
-    cmake .. -DCMAKE_INSTALL_PREFIX=${BASE_DIR}/opt -DUSE_TENSORRT=OFF -DUSE_NVRTC=ON
-fi
-make -j
-make install
+#echo "Installing pytorch/ATEN..."
+#TMPDIR=${BASE_DIR}/tmp python setup.py install
+#cd aten/
+#mkdir -p build
+#cd build
+#if [ "$1" == "GPU" ]; then
+#    cmake .. -DCMAKE_INSTALL_PREFIX=${BASE_DIR}/opt -DUSE_TENSORRT=OFF -DUSE_NVRTC=ON -DCUDA_TOOLKIT_ROOT_DIR=${CUDA_HOME}
+#else
+#    cmake .. -DCMAKE_INSTALL_PREFIX=${BASE_DIR}/opt -DUSE_TENSORRT=OFF -DUSE_NVRTC=ON
+#fi
+#make -j
+#make install
 
 pip install msgpack hyperopt
