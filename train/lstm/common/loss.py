@@ -28,5 +28,5 @@ def rescaled_mean_squared_error(output, target, discretized_max = 1000.0):
     return torch.mean(((output - target)/discretized_max)**2)
 
 def rescaled_huber_loss(output, target, discretized_max = 1000.0):
-    not_rescaled = F.smooth_l1_loss(output, target, size_average=False)
+    not_rescaled = F.smooth_l1_loss(output, target, reduction='sum')
     return (not_rescaled / discretized_max)
