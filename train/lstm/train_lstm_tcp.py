@@ -442,17 +442,21 @@ if __name__ == '__main__':
                 pred_list = np.append(pred_list, predicted.detach().numpy())
 
                 if cur_step % 100 == 0 or steps - cur_step <= 1:
-                    print(f"W. Distance With 0: {wasserstein_distance(true_list, pred_list)}")
+
+                    print(f"MSE: {skm.mean_squared_error(true_list, pred_list)}")
+                    print(f"MAE: {skm.mean_absolute_error(true_list, pred_list)}")
+                    print(f"R2: {skm.r2_score(true_list, pred_list)}")
+                    print(f"W. Distance: {wasserstein_distance(true_list, pred_list)}")
+
                     mask = true_list != 0
-                    true_list = true_list[mask]
-                    pred_list = pred_list[mask]
+                    non_zero_true_list = true_list[mask]
+                    non_zero_pred_list = pred_list[mask]
                     if len(true_list) > 0:
-                        print(
-                            f"MAPE: {skm.mean_absolute_percentage_error(true_list, pred_list)}")
-                        print(f"MSE: {skm.mean_squared_error(true_list, pred_list)}")
-                        print(f"MAE: {skm.mean_absolute_error(true_list, pred_list)}")
-                        print(f"R2: {skm.r2_score(true_list, pred_list)}")
-                        print(f"W. Distance: {wasserstein_distance(true_list, pred_list)}")
+                        print(f"Non-zero MAPE: {skm.mean_squared_error(non_zero_true_list, non_zero_pred_list)}")
+                        print(f"Non-zero MSE: {skm.mean_squared_error(non_zero_true_list, non_zero_pred_list)}")
+                        print(f"Non-zero MAE: {skm.mean_absolute_error(non_zero_true_list, non_zero_pred_list)}")
+                        print(f"Non-zero R2: {skm.r2_score(non_zero_true_list, non_zero_pred_list)}")
+                        print(f"Non-zero W. Distance: {wasserstein_distance(non_zero_true_list, non_zero_pred_list)}")
 
             index += batch_size
 
