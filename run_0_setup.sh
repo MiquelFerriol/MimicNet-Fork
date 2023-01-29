@@ -88,25 +88,6 @@ mkdir -p opt
 mkdir -p tmp
 
 
-echo "Installing anaconda..."
-cd src/
-rm -f Anaconda3-*
-rm -rf ${BASE_DIR}/opt/anaconda3
-wget https://repo.anaconda.com/archive/Anaconda3-5.3.1-Linux-x86_64.sh
-chmod ugo+x Anaconda3-5.3.1-Linux-x86_64.sh
-./Anaconda3-5.3.1-Linux-x86_64.sh -b -p ${BASE_DIR}/opt/anaconda3
-conda update -y -n base -c defaults conda
-
-
-echo "Installing pytorch prereqs..."
-sudo apt-get install -y cmake libgflags-dev
-conda install -y numpy # putting everything on one line causes a downgrade of python to 2.7 for some reason...
-conda install -y pyyaml mkl mkl-include setuptools cmake cffi typing h5py
-conda install -y -c mingfeima mkldnn
-conda install -y -c pytorch magma-cuda92
-conda install -y pyyaml==5.4.1 # switch yaml to 5.4.1
-
-
 git clone https://github.com/google/glog.git || true
 cd glog
 git checkout v0.4.0
@@ -123,7 +104,7 @@ git rm --cached third_party/nervanagpu || true
 git rm --cached third_party/eigen || true
 git submodule update --init --recursive
 cd third_party/pybind11
-python3 setup.py install
+python setup.py install
 cp -r include ${BASE_DIR}/opt/
 cd ../..
 
