@@ -400,7 +400,7 @@ if __name__ == '__main__':
 
         while window_size + index + (batch_size - 1) <= X.shape[0]:
             cur_step = (int)(index/batch_size)
-
+            print("Step %s/%s" % (cur_step, steps))
             X_train, Y_d_train, Y_l_train = \
                     train_both_data_generator(X, y_d, y_l, window_size, \
                                               index, batch_size)
@@ -424,7 +424,7 @@ if __name__ == '__main__':
                                disc_factor)
             loss_list.append(loss_value)
             loss_count.append(len(X_train))
-            if cur_step % 1000 == 0 or steps - cur_step <= 1:
+            if cur_step % 100 == 0 or steps - cur_step <= 1:
                 print('STEP: ', cur_step, '/', steps,
                          ' last loss: ', loss_value,
                          ' min loss: ', min(loss_list),
@@ -480,3 +480,4 @@ if __name__ == '__main__':
 
     if is_log:
         train_log.close()
+
