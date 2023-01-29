@@ -119,15 +119,15 @@ cd ..
 echo "Installing pybind11..."
 git clone --recursive https://github.com/pytorch/pytorch || true
 cd pytorch
-git checkout v0.4.1
 git rm --cached third_party/nervanagpu || true
 git rm --cached third_party/eigen || true
 git submodule update --init --recursive
 cd third_party/pybind11
-python setup.py install
+python3 setup.py install
 cp -r include ${BASE_DIR}/opt/
 cd ../..
 
+#git checkout v0.4.1
 
 echo "Installing pytorch/ATEN..."
 TMPDIR=${BASE_DIR}/tmp python setup.py install
