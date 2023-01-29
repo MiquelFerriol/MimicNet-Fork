@@ -400,7 +400,6 @@ if __name__ == '__main__':
 
         while window_size + index + (batch_size - 1) <= X.shape[0]:
             cur_step = (int)(index/batch_size)
-            print("Step %s/%s" % (cur_step, steps))
             X_train, Y_d_train, Y_l_train = \
                     train_both_data_generator(X, y_d, y_l, window_size, \
                                               index, batch_size)
