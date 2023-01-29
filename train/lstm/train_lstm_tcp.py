@@ -451,7 +451,7 @@ if __name__ == '__main__':
                     non_zero_true_list = true_list[mask]
                     non_zero_pred_list = pred_list[mask]
                     if len(non_zero_true_list) > 0:
-                        print(f"Non-zero MAPE: {skm.mean_squared_error(non_zero_true_list, non_zero_pred_list)}")
+                        print(f"Non-zero MAPE: {skm.mean_absolute_percentage_error(non_zero_true_list, non_zero_pred_list)}")
                         print(f"Non-zero MSE: {skm.mean_squared_error(non_zero_true_list, non_zero_pred_list)}")
                         print(f"Non-zero MAE: {skm.mean_absolute_error(non_zero_true_list, non_zero_pred_list)}")
                         print(f"Non-zero R2: {skm.r2_score(non_zero_true_list, non_zero_pred_list)}")
