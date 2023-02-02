@@ -105,6 +105,7 @@ conda install -y pyyaml mkl mkl-include setuptools cmake cffi typing h5py
 conda install -y -c mingfeima mkldnn
 conda install -y -c pytorch magma-cuda92
 conda install -y pyyaml==5.4.1 # switch yaml to 5.4.1
+conda install -y -c conda-forge hyperopt
 conda update -y libstdcxx-ng
 conda install -y -c pytorch pytorch=0.4.1
 

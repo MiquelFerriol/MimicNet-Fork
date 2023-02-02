@@ -144,7 +144,8 @@ def objective(params):
         eval_file_name = result_dir + "/" + target + "_c"+ str(cl) + ".dat"
 
         ret_value = 10000
-
+        print("Computing Metrics with:")
+        print(eval_file_name, baseline_file_name)
         compare_metrics(eval_file_name, baseline_file_name)
         if metric == "ks" or metric == "w1":
             if metric == "ks":
