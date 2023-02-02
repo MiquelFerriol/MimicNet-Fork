@@ -20,4 +20,4 @@ exec 7>&1
 MODEL_STR=$(./run_3_hypertrain.sh ${VARIANT} train/lstm/train_lstm_${VARIANT}.py \
                     ${RESULTS_DIR}  tune/hp_configs/lstm_${VARIANT}.json | tee /dev/fd/7 | tail -n 1)
 
-./run_4_mimicnet.sh ${VARIANT} ${MODEL_STR} ${NUM_CLUSTERS} ${@:3}
+#./run_4_mimicnet.sh ${VARIANT} ${MODEL_STR} ${NUM_CLUSTERS} ${@:3}

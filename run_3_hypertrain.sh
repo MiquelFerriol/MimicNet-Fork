@@ -21,5 +21,5 @@ mkdir -p ${RESULTS_DIR}
 
 echo "Using data set ${DATA_PATH}"
 train/intermimic/train_intermimic_${VARIANT}.py ${DATA_PATH} 1.1. &
-python3 tune/bayes_hyper_opt.py ${VARIANT} ${TRAIN_SCRIPT} \
+python3 -u tune/bayes_hyper_opt.py ${VARIANT} ${TRAIN_SCRIPT} \
         ${DATA_PATH} ${RESULTS_DIR} ${SEARCH_SPACE_FILE} ${@:5}
