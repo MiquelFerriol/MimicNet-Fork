@@ -64,6 +64,9 @@ def objective(params):
     cluster_array = params["test_cluster_counts"]
     del params["test_cluster_counts"]
 
+    L = params["L"]
+    del params["L"]
+
     # assemble the training script arguments and the unique name of the trial,
     # for both ingress and egress
     arguments_in = ""
@@ -124,7 +127,7 @@ def objective(params):
         print(str(cl))
         cmd = " ".join(["./run.sh", "RecordEval", unique_path_in,
                         unique_path_out, inter_mimic_model,
-                        "-L", original_args,
+                        "-L", L, original_args,
                         # these overwrite originals:
                         "-s", str(seed), "-c", str(cl),
                         ">>", hp_results_dir + "/log.txt", "2>&1"])
@@ -209,6 +212,8 @@ if __name__ == "__main__":
                         help="JSON file that contains the config of the current job")
     parser.add_argument("--max_evals", type=int, \
                         help="Number of iterations to run")
+    parser.add_argument("-L", type=int, \
+                        help="Link capacity")
     args = parser.parse_args()
 
     max_evals = 20
@@ -288,7 +293,7 @@ if __name__ == "__main__":
             print("Generating NEW eval data for " + str(cl) + " clusters")
             cmd = " ".join(["evaluate/run_get_eval.sh", args.variant,
                             str(cl), args.data_dir,
-                            "-L", original_args])
+                            "-L", args.L])
 
             print("Running: " + cmd)
             subprocess.call(cmd,
@@ -318,6 +323,8 @@ if __name__ == "__main__":
     space["seed"] = new_seed
     assert ("original_args" not in space)
     space["original_args"] = original_args
+    assert ("L" not in space)
+    space["L"] = args.L
 
     print("Starting hyperparam tuning with OMNeT seed:", new_seed)
     trials = Trials()
