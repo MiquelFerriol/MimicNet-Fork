@@ -288,7 +288,7 @@ if __name__ == "__main__":
             print("Generating NEW eval data for " + str(cl) + " clusters")
             cmd = " ".join(["evaluate/run_get_eval.sh", args.variant,
                             str(cl), args.data_dir,
-                            original_args])
+                            "-L", original_args])
 
             print("Running: " + cmd)
             subprocess.call(cmd,
