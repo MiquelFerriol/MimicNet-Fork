@@ -480,6 +480,3 @@ if __name__ == '__main__':
 
     if is_log:
         train_log.close()
-
-    np.save(f"true_{direction}.npy", true_list)
-    np.save(f"pred_{direction}_{wasserstein_distance(true_list, pred_list)}_{skm.mean_squared_error(true_list, pred_list)}_{skm.mean_absolute_error(true_list, pred_list)}_{skm.r2_score(true_list, pred_list)}.npy", pred_list)
