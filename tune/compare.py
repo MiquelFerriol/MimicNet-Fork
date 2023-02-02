@@ -74,6 +74,8 @@ def compare_metrics(input1, input2):
         val1 = [float(x.strip().split()[-1]) for x in f1.readlines()[1:]]
         val2 = [float(x.strip().split()[-1]) for x in f2.readlines()[1:]]
 
+        print(val1)
+        print(val2)
         true_list = np.array(val1)
         pred_list = np.array(val2)
 
