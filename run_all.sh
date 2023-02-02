@@ -21,3 +21,6 @@ MODEL_STR=$(./run_3_hypertrain.sh ${VARIANT} train/lstm/train_lstm_${VARIANT}.py
                     ${RESULTS_DIR}  tune/hp_configs/lstm_${VARIANT}.json | tee /dev/fd/7 | tail -n 1)
 
 #./run_4_mimicnet.sh ${VARIANT} ${MODEL_STR} ${NUM_CLUSTERS} ${@:3}
+
+
+./run_3_hypertrain.sh tcp train/lstm/train_lstm_tcp.py data/sw2_sv4_l0.70_L100e6_s0_qDropTailQueue_vTCPNewReno_S20_tcp tune/hp_configs/lstm_tcp.json
