@@ -6,7 +6,7 @@
         "drop_weight": [0.5, 0.9, 0.1],
         "num_layers": [2, 5, 1],
         "latency_loss": ["huber", "mae"],
-        "num_epochs": [1, 1, 1]
+        "num_epochs": [2, 2, 2]
     },
     "out_parameters": {
         "batch_size": [64, 256, 64],
@@ -15,7 +15,7 @@
         "drop_weight": [0.5, 0.9, 0.1],
         "num_layers": [2, 5, 1],
         "latency_loss": ["huber", "mae"],
-        "num_epochs": [1, 1, 1]
+        "num_epochs": [2, 2, 2]
     },
     "target": "rtt",
     "metric": "rtt_w1",
