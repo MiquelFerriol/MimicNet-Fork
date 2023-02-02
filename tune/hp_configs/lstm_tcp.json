@@ -18,6 +18,6 @@
         "num_epochs": [1, 5, 2]
     },
     "target": "rtt",
-    "metric": "rtt_w1",
+    "metric": "w1",
     "test_cluster_counts": [2, 4, 8]
 }
