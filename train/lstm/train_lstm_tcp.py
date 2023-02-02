@@ -440,7 +440,7 @@ if __name__ == '__main__':
                 val_loss_count.append(len(X_test))
                 true_list = np.append(true_list, true.detach().numpy())
                 pred_list = np.append(pred_list, predicted.detach().numpy())
-
+                """
                 if cur_step % 100 == 0 or steps - cur_step <= 1:
 
                     print(f"MSE: {skm.mean_squared_error(true_list, pred_list)}")
@@ -457,6 +457,7 @@ if __name__ == '__main__':
                         print(f"Non-zero MAE: {skm.mean_absolute_error(non_zero_true_list, non_zero_pred_list)}")
                         print(f"Non-zero R2: {skm.r2_score(non_zero_true_list, non_zero_pred_list)}")
                         print(f"Non-zero W. Distance: {wasserstein_distance(non_zero_true_list, non_zero_pred_list)}")
+                """
 
             index += batch_size
 
