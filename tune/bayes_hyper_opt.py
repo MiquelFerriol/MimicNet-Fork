@@ -126,8 +126,7 @@ def objective(params):
         print(str(seed))
         print(str(cl))
         cmd = " ".join(["./run.sh", "RecordEval", unique_path_in,
-                        unique_path_out, inter_mimic_model,
-                        "-L", str(L), original_args,
+                        unique_path_out, inter_mimic_model, original_args,
                         # these overwrite originals:
                         "-s", str(seed), "-c", str(cl),
                         ">>", hp_results_dir + "/log.txt", "2>&1"])
