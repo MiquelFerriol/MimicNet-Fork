@@ -182,7 +182,7 @@ if __name__ == "__main__":
         print ("Overall min mse: " + min_version)
     else:
         mse, samples = compare_fct(real_fct, approx_fct)
-            compare_metrics(real_fct, approx_fct)
+        compare_metrics(real_fct, approx_fct)
         if samples > 0.5*total_real_samples:
             print ("mse: " + str(mse))
         else:
