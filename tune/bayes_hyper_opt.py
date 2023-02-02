@@ -277,6 +277,7 @@ if __name__ == "__main__":
             continue
 
         evalfolder = args.data_dir + "/eval" + str(cl)
+        print("EVAL FOLDER: " + evalfolder)
         if not os.path.isdir(evalfolder):
             print("Generating NEW eval data for " + str(cl) + " clusters")
             subprocess.call(" ".join(["evaluate/run_get_eval.sh", args.variant,
