@@ -382,6 +382,7 @@ if __name__ == '__main__':
     rs = [_ for _ in range(math.floor(X.shape[0]/batch_size) - 1)]
 
     # batches_in_epoch = math.floor(X.shape[0]/batch_size) - 1 - window_size
+    print("NUM EPOCHS = %s" % num_epochs)
     for i in range(num_epochs):
         print('EPOCH: ', (i + start_epoch))
         if is_log:
