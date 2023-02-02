@@ -8,9 +8,9 @@ if [[ -z ${2} ]]; then
     exit 1
 fi
 
-rm -r simulate/simulate_tcp/results/*
-rm -r simulate/simulate_mimic_tcp/results/*
-rm -r data/
+rm -f -r simulate/simulate_tcp/results/*
+rm -f -r simulate/simulate_mimic_tcp/results/*
+rm -f -r data/
 
 VARIANT=${1}
 NUM_CLUSTERS=${2}
