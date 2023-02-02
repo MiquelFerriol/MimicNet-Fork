@@ -144,6 +144,8 @@ def objective(params):
         eval_file_name = result_dir + "/" + target + "_c"+ str(cl) + ".dat"
 
         ret_value = 10000
+
+        compare_metrics(eval_file_name, baseline_file_name)
         if metric == "ks" or metric == "w1":
             if metric == "ks":
                 if target == "thr":
