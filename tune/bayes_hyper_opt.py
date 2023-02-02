@@ -115,6 +115,13 @@ def objective(params):
         subprocess.call("./clean.sh > /dev/null 2>&1",
                         cwd="simulate/simulate_mimic_" + variant,
                         shell=True)
+        print("Arguments")
+        print(unique_path_in)
+        print(unique_path_out)
+        print(inter_mimic_model)
+        print(original_args)
+        print(str(seed))
+        print(str(cl))
         cmd = " ".join(["./run.sh", "RecordEval", unique_path_in,
                                         unique_path_out, inter_mimic_model,
                                         original_args,
