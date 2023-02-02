@@ -176,7 +176,6 @@ if __name__ == "__main__":
     if os.path.isdir(approx_fct):
         for fct in os.listdir(approx_fct):
             mse, samples = compare_fct(real_fct, approx_fct+"/"+fct)
-            compare_metrics(real_fct, approx_fct+"/"+fct)
             print("Version:", fct, "samples:", samples, "MSE:", mse)
             if mse < min_mse and samples > 0.5*total_real_samples:
                 min_mse = mse
@@ -184,7 +183,6 @@ if __name__ == "__main__":
         print ("Overall min mse: " + min_version)
     else:
         mse, samples = compare_fct(real_fct, approx_fct)
-        compare_metrics(real_fct, approx_fct)
         if samples > 0.5*total_real_samples:
             print ("mse: " + str(mse))
         else:
