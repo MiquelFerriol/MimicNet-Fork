@@ -6,6 +6,8 @@ from scipy.stats import ks_2samp
 import sklearn.metrics as skm
 from scipy.stats import wasserstein_distance
 import numpy as np
+
+
 def compare_fct_mse(input1, input2):
     fct_dict = dict()
 
@@ -41,12 +43,14 @@ def compare_fct_mse(input1, input2):
     else:
         return mse / num_flows, num_flows
 
+
 def compare_ks_cdf(input1, input2):
     with open(input1) as f1, open(input2) as f2:
         cdf1 = [float(x.strip().split()[0]) for x in f1.readlines()[1:]]
         cdf2 = [float(x.strip().split()[0]) for x in f2.readlines()[1:]]
         ks_stat, _ = ks_2samp(cdf1, cdf2)
         return ks_stat
+
 
 def compare_w1_cdf(input1, input2):
     with open(input1) as f1, open(input2) as f2:
@@ -55,12 +59,14 @@ def compare_w1_cdf(input1, input2):
         w1_dist = wasserstein_distance(cdf1, cdf2)
         return w1_dist
 
+
 def compare_ks(input1, input2):
     with open(input1) as f1, open(input2) as f2:
         val1 = [float(x.strip().split()[-1]) for x in f1.readlines()[1:]]
         val2 = [float(x.strip().split()[-1]) for x in f2.readlines()[1:]]
         ks_stat, _ = ks_2samp(val1, val2)
         return ks_stat
+
 
 def compare_w1(input1, input2):
     with open(input1) as f1, open(input2) as f2:
@@ -69,6 +75,7 @@ def compare_w1(input1, input2):
         w1_dist = wasserstein_distance(val1, val2)
         return w1_dist
 
+
 def compare_metrics(input1, input2):
     with open(input1) as f1, open(input2) as f2:
         val1 = [float(x.strip().split()[-1]) for x in f1.readlines()[1:]]
@@ -76,8 +83,8 @@ def compare_metrics(input1, input2):
 
         print(val1[:min(len(val1), 10)])
         print(val2[:min(len(val2), 10)])
-        true_list = np.array(val1)
-        pred_list = np.array(val2)
+        true_list = np.array(val1[:min(len(val1), len(val2))])
+        pred_list = np.array(val2[:min(len(val1), len(val2))])
 
         print(f"MSE: {skm.mean_squared_error(true_list, pred_list)}")
         print(f"MAE: {skm.mean_absolute_error(true_list, pred_list)}")
@@ -93,6 +100,7 @@ def compare_metrics(input1, input2):
             print(f"Non-zero MAE: {skm.mean_absolute_error(non_zero_true_list, non_zero_pred_list)}")
             print(f"Non-zero R2: {skm.r2_score(non_zero_true_list, non_zero_pred_list)}")
             print(f"Non-zero W. Distance: {wasserstein_distance(non_zero_true_list, non_zero_pred_list)}")
+
 
 def compare_pct(input1, input2, pct):
     val1_num = dict()
@@ -139,6 +147,7 @@ def compare_pct(input1, input2, pct):
                 break
         return abs(pct1 - pct2)
 
+
 def compare_ks_no0s(input1, input2):
     with open(input1) as f1, open(input2) as f2:
         val1 = [float(x.strip().split()[-1]) for x in f1.readlines()[1:]]
@@ -148,6 +157,7 @@ def compare_ks_no0s(input1, input2):
         ks_stat, _ = ks_2samp(val1_no0s, val2_no0s)
         return ks_stat
 
+
 def compare_w1_no0s(input1, input2):
     with open(input1) as f1, open(input2) as f2:
         val1 = [float(x.strip().split()[-1]) for x in f1.readlines()[1:]]
@@ -156,6 +166,7 @@ def compare_w1_no0s(input1, input2):
         val2_no0s = [x for x in val2 if x > 0]
         w1_dist = wasserstein_distance(val1_no0s, val2_no0s)
         return w1_dist
+
 
 if __name__ == "__main__":
     if len(sys.argv) < 3:
@@ -169,21 +180,21 @@ if __name__ == "__main__":
         for line in fh:
             total_real_samples += 1
 
-    print ("Total real samples:", total_real_samples)
+    print("Total real samples:", total_real_samples)
 
     min_mse = 1000000000
     min_version = ""
     if os.path.isdir(approx_fct):
         for fct in os.listdir(approx_fct):
-            mse, samples = compare_fct(real_fct, approx_fct+"/"+fct)
+            mse, samples = compare_fct(real_fct, approx_fct + "/" + fct)
             print("Version:", fct, "samples:", samples, "MSE:", mse)
-            if mse < min_mse and samples > 0.5*total_real_samples:
+            if mse < min_mse and samples > 0.5 * total_real_samples:
                 min_mse = mse
                 min_version = fct
-        print ("Overall min mse: " + min_version)
+        print("Overall min mse: " + min_version)
     else:
         mse, samples = compare_fct(real_fct, approx_fct)
-        if samples > 0.5*total_real_samples:
-            print ("mse: " + str(mse))
+        if samples > 0.5 * total_real_samples:
+            print("mse: " + str(mse))
         else:
-            print ("Insufficient samples.")
+            print("Insufficient samples.")
