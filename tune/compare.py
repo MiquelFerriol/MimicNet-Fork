@@ -6,7 +6,7 @@ from scipy.stats import ks_2samp
 import sklearn.metrics as skm
 from scipy.stats import wasserstein_distance
 import numpy as np
-
+import pickle
 
 def compare_fct_mse(input1, input2):
     fct_dict = dict()
@@ -84,7 +84,10 @@ def compare_metrics(input1, input2):
 
         true_list = np.array(val2[:min(len(val1), len(val2))])
         pred_list = np.array(val1[:min(len(val1), len(val2))])
-
+        with open(f'true_{wasserstein_distance(val1,val2)}_{wasserstein_distance(val1,val2)/wasserstein_distance([0]*len(val2),val2)}.pkl', 'wb') as f:
+            pickle.dump(val2, f)
+        with open(f'pred_{wasserstein_distance(val1,val2)}_{wasserstein_distance(val1,val2)/wasserstein_distance([0]*len(val2),val2)}.pkl', 'wb') as f:
+            pickle.dump(val1, f)
         print(f"MAPE: {skm.mean_absolute_percentage_error(true_list, pred_list)}")
         print(f"MSE: {skm.mean_squared_error(true_list, pred_list)}")
         print(f"MAE: {skm.mean_absolute_error(true_list, pred_list)}")
