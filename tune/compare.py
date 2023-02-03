@@ -73,6 +73,7 @@ def compare_w1(input1, input2):
         val1 = [float(x.strip().split()[-1]) for x in f1.readlines()[1:]]
         val2 = [float(x.strip().split()[-1]) for x in f2.readlines()[1:]]
         w1_dist = wasserstein_distance(val1, val2)
+        print(f"Wasserstein distance: {w1_dist}")
         return w1_dist
 
 
@@ -83,13 +84,13 @@ def compare_metrics(input1, input2):
 
         print(val1[:min(len(val1), 10)])
         print(val2[:min(len(val2), 10)])
-        true_list = np.array(val1[:min(len(val1), len(val2))])
-        pred_list = np.array(val2[:min(len(val1), len(val2))])
+        true_list = np.array(val2[:min(len(val1), len(val2))])
+        pred_list = np.array(val1[:min(len(val1), len(val2))])
 
         print(f"MSE: {skm.mean_squared_error(true_list, pred_list)}")
         print(f"MAE: {skm.mean_absolute_error(true_list, pred_list)}")
         print(f"R2: {skm.r2_score(true_list, pred_list)}")
-        print(f"W. Distance: {wasserstein_distance(true_list, pred_list)}")
+        print(f"W. Distance: {wasserstein_distance(val1,val2)/wasserstein_distance([0]*len(val2),val2)}")
 
         mask = true_list != 0
         non_zero_true_list = true_list[mask]
