@@ -58,7 +58,7 @@ fi
 shift
 
 SEED=0
-SIMU_LEN=15
+SIMU_LEN=10
 ROUTING="ecmp"
 QUEUE="DropTailQueue"
 TCPVAR="TCPNewReno"
