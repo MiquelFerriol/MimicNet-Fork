@@ -82,25 +82,16 @@ def compare_metrics(input1, input2):
         val1 = [float(x.strip().split()[-1]) for x in f1.readlines()[1:]]
         val2 = [float(x.strip().split()[-1]) for x in f2.readlines()[1:]]
 
-        print(val1[:min(len(val1), 10)])
-        print(val2[:min(len(val2), 10)])
         true_list = np.array(val2[:min(len(val1), len(val2))])
         pred_list = np.array(val1[:min(len(val1), len(val2))])
 
+        print(f"MAPE: {skm.mean_absolute_percentage_error(true_list, pred_list)}")
         print(f"MSE: {skm.mean_squared_error(true_list, pred_list)}")
         print(f"MAE: {skm.mean_absolute_error(true_list, pred_list)}")
         print(f"R2: {skm.r2_score(true_list, pred_list)}")
-        print(f"W. Distance: {wasserstein_distance(val1,val2)/wasserstein_distance([0]*len(val2),val2)}")
+        print(f"W. Distance: {wasserstein_distance(val1,val2)}")
+        print(f"Norm. W. Distance: {wasserstein_distance(val1,val2)/wasserstein_distance([0]*len(val2),val2)}")
 
-        mask = true_list != 0
-        non_zero_true_list = true_list[mask]
-        non_zero_pred_list = pred_list[mask]
-        if len(non_zero_true_list) > 0:
-            print(f"Non-zero MAPE: {skm.mean_absolute_percentage_error(non_zero_true_list, non_zero_pred_list)}")
-            print(f"Non-zero MSE: {skm.mean_squared_error(non_zero_true_list, non_zero_pred_list)}")
-            print(f"Non-zero MAE: {skm.mean_absolute_error(non_zero_true_list, non_zero_pred_list)}")
-            print(f"Non-zero R2: {skm.r2_score(non_zero_true_list, non_zero_pred_list)}")
-            print(f"Non-zero W. Distance: {wasserstein_distance(non_zero_true_list, non_zero_pred_list)}")
 
 
 def compare_pct(input1, input2, pct):
